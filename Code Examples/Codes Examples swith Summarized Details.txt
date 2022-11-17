@@ -1,0 +1,192 @@
+
+1. Working with HDFS-HDFS Access: with SSH
+		IP Address: 35.223.46.173 Port: 22
+		Username: cdp30011
+		Password : Qwerty123456$	
+
+		Create directory to load file:
+		Leave Safe Mode: sudo -u hdfs hdfs dfsadmin -safemode leave
+		sudo -u hdfs hadoop fs -mkdir /cdproot
+		sudo -u hdfs hadoop fs -mkdir /cdproot/spark
+		sudo -u hdfs hadoop fs -mkdir /cdproot/nifi
+		sudo -u hdfs hadoop fs -mkdir /cdproot/spark
+	            sudo -u hdfs hadoop fs -ls /cdproot
+		sudo -u hdfs hadoop fs -ls /cdproot
+		sudo -u hdfs hadoop fs -put Data.txt /cdproot/data
+		sudo -u hdfs hadoop fs -cat /cdproot/data/Data.txt
+		Deleting files: sudo -u hdfs hadoop fs -rmdir /cdproot/spark		
+		
+
+1. Labs with Theory with Spark-Shell:
+	1. Whats is Spark:
+	2. Where to Write 
+	3. Commands References:
+		1. Cloudera: https://docs.cloudera.com/documentation/enterprise/6/6.3/PDF/cloudera-spark.pdf
+		2. Data Bricks: https://pages.databricks.com/rs/094-YMS-629/images/LearningSpark2.0.pdf		
+		
+	3. Official Examples : https://spark.apache.org/examples.html
+		
+	1. Creating Data Frame:
+		Scala>	
+		case class Language(name : String , creator : String , use : String)
+		val lArray = Array(
+						Language("Java", "SM", "Apps"),
+						Language("Scala","Martin", "ML"))
+		val df =sc.parallelize(lArray)
+		val mDF = spark.createDataFrame(df)
+		mDF.show()				
+	
+	1. Working with Spark RDD and Case Class:
+		Step-1: Create Learners Case Class object
+case class Experts(name : String , email : String , city :String)		
+		
+		Step-2: Create the instances of the Learners and add them into an Array. 
+val mData = Array(
+ Experts("Jyoti" , "jyoti@maxtea.com", "Mumbai"),
+ Experts("Julie" , "julie@maxtea.com", "Siliguri"),
+ Experts("Rohit" , "rohit@maxtea.com", "NY"),
+ 
+)		Step-3: Create an RDD from the raw data
+			val mRRD = sc.parallelize(mData)
+		Step-4: Create DataFrame from RDD
+			val mDF = spark.createDataFrame(mRRD)
+			mDF.show()
+		Step-5: Save DataFrame data as parquet format. 
+			mDF.write.parquet("spark6/cdp.parquet")
+		Step-6: Read back the saved parquet file as Dataframe and display the result
+		val readDF = spark.read.parquet("spark6/cdp.parquet")
+		readDF.show()			
+			
+2. Labs with Theory with Spark SQL:
+
+
+3. Labs with HDFS with Theory
+
+
+
+1. Labs with Theory on Jupyternotebook:
+	1. Install Java
+	2. Install Jupyter Notebook
+	3. Install Pyspark , pip3 install pyspark
+	4. Install findspark, pip3 install findspark
+	
+	5. Open and start code below:
+		import findspark
+		findspark.init()
+		import pyspark
+		
+		# Checking context
+		print("Session Context",sc)
+		
+		
+	2. Exmples
+	
+	
+import findspark
+		findspark.init()
+		import pyspark	
+		
+#Session
+from pyspark.sql import SparkSession
+spark = SparkSession.builder.appName('SparkByExamples.com').getOrCreate()
+
+# Data preparation
+data = [("Java", "SM Systems"), ("Python", "Juido Van Russom"), ("Scala", "Martin")]
+columns = ["proLan","creator"]
+
+# Create DataFrame
+df = spark.createDataFrame(data).toDF(*columns)
+df.show()
+
+		
+----------------------------------------------------------------------------------------------------------------
+  Resources for CDP Data Developer ( CDP 3001) Certification from Cloudera
+  ************************************************************************
+  Designed by AMRIT CHHETR
+
+Patterns : 1/2 Paragraphs for Theory rest labs in each Slides:
+
+1. CDP- Understanding 
+	1. Theory : 10 Minutes
+		1. Cloudera Data Platform (CDP) is a hybrid data platform designed for unmatched freedom to choose—any cloud, any analytics, any data and Machine LearningSpark2
+		2. CDP supports quality data management and data analytics with optimal Performance, Scalability, and Security.
+		3. CML( Cloudera Machine Learning ) CDP's support for Machine Learning	
+		4. CDP supports MultiCloud and On Primises, it is Scalable , comes with Portable Data Analytics and gives Unified Security 
+		5. CDP spports Hybrid Architecture of Deployment - 
+			CDP Public Cloud, 
+			CDP Private Cloud and 
+			CDP One - All in one DataLake House Soluition with Data Analytics
+			( Free/Offcial References for Archirecture : https://www.cloudera.com/products/cloudera-data-platform.html?tab=0)
+			
+	2. Labs- Accessing Spark Prompt:
+		1. Go to Cloudera Manager Admin Console Home page, click the Hive service
+		2. In Hive service page, click the Configuration tab.
+		3. Search for hadoop.proxyuser.hive.groups to locate the Hive Metastore Access Control and Proxy User Groups Override property.
+		4. Expand (+), enter the groups you want to have access to the metastorem save and restat Hive Metastore Server.
+		5. Spark on Sacala: $ /bin/spark-shell  (On Scala)
+						    $ /bin/pyspark       ( On Python)
+		    References: https://docs.cloudera.com/cdp-private-cloud-base/7.1.3/running-spark-applications/topics/spark-run-first-app.html
+			
+	3. Checking with Spark Examle - on Scala ( File on File System)
+		1. scala> val myfile = sc.textFile("DataSample.txt")
+		   scala> val counts = myfile.flatMap(line => line.split(" ")).map(word => (word, 1)).reduceByKey(_ + _)
+		   scala> counts.saveAsTextFile("Outout.txt")
+		   
+		
+		
+		
+
+		
+2. Running MapReduce on CDP Private Cloud :
+	1. Login to Host Cluster at <>
+	2. Run available MapReduce Example/Code
+	   $ yarn jar /opt/cloudera/parcels/CDH/lib/hadoop-mapreduce/hadoop-mapreduce-examples.jar pi 10 100
+	3. Navigate to Cluster > ClusterName > yarn Applications to see the results
+	    ( References: https://docs.cloudera.com/cdp-private-cloud-base/7.1.6/installation/topics/cdpdc-running-mapreduce-job.html)
+	
+	
+2. Writin MapReduce for CDP Private Cloud :
+	1. Login to Host Cluster at <>
+	2. Run available MapReduce Example/Code
+	   $ yarn jar /opt/cloudera/parcels/CDH/lib/hadoop-mapreduce/hadoop-mapreduce-examples.jar pi 10 100
+	3. Navigate to Cluster > ClusterName > yarn Applications to see the results
+	
+	
+	   
+		
+	
+2. CDP Practicals: 
+	1. Labs-1: 
+
+
+
+
+Mapreduce on CDP and Quick Start VM:
+1.  $ cd /usr/lib/hadoop-mapreduce/
+    $ ls
+	$ hadoop jar hadoop-mapreduce-examples.jar wordcount , reports need of files
+	$ echo "Word Count Eammple on CDP " > /home/cloudera/datafile1
+	$ echo "W CDP 3001 needs Spark and NIFI too " > /home/cloudera/datafile2
+	$ hdfs dfs -put /home/cloudera/datafile1 /user/cloudera/input
+	$ hdfs dfs -put /home/cloudera/datafile2 /user/cloudera/input
+	$ hadoop jar hadoop-mapreduce-examples.jar wordcount /user/cloudera/input /user/cloudera/output
+	$ hdfs dfs -ls /user/cloudera/output
+	$ hdfs dfs -cat /user/cloudera/output/part-r-00000
+
+
+
+
+	
+
+
+
+
+X. Tunung CDP Private Cloud Services - Tunung Apache Hadoop YARN:
+1. References: https://docs.cloudera.com/cdp-private-cloud-base/7.1.6/yarn-reference/topics/yarn-tuning.html
+2. Migrating MapReduce 1 to MapReduce 2- https://docs.cloudera.com/cdp-private-cloud-upgrade/latest/upgrade-cdh/topics/yarn-migrating-mapreduce.html
+All are Free/OSS software for secure and CDP-3001 Training:
+-------------------------------------------------------------
+1. Python 3.6: https://www.python.org/downloads/release/python-360/
+2. Scala MSI installer: https://downloads.lightbend.com/scala/2.13.1/scala-2.13.1.msi
+3. JDK 11 for Jenkins(Latest): https://www.oracle.com/in/java/technologies/javase/jdk11-archive-downloads.html
+4. Jenkins and Git based on these details https://www.cloudera.com/about/training/certification/cdp-datadev-exam-cdp-3001.html
